@@ -24,19 +24,21 @@ function load(stats) {
 		chunk.children = [];
 	});
 	stats.modules.forEach(function(module) {
-		module.reasons.forEach(function(reason) {
-			var m = mapModulesIdent["$"+reason.moduleIdentifier];
-			if(!m) return;
-			reason.moduleUid = m.uid;
-			m.dependencies.push({
-				type: reason.type,
-				moduleId: module.id,
-				moduleUid: module.uid,
-				module: module.name,
-				userRequest: reason.userRequest,
-				loc: reason.loc
+		if (module.reasons) {
+			module.reasons.forEach(function(reason) {
+				var m = mapModulesIdent["$"+reason.moduleIdentifier];
+				if(!m) return;
+				reason.moduleUid = m.uid;
+				m.dependencies.push({
+					type: reason.type,
+					moduleId: module.id,
+					moduleUid: module.uid,
+					module: module.name,
+					userRequest: reason.userRequest,
+					loc: reason.loc
+				});
 			});
-		});
+		}
 		module.issuerUid = mapModulesIdent["$"+module.issuer] && mapModulesIdent["$"+module.issuer].uid;
 		(function setTimestamp(module) {
 			if(typeof module.timestamp === "number") return module.timestamp;

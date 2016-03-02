@@ -19,12 +19,15 @@ app.stats.modules.forEach(function(module, idx) {
 app.stats.modules.forEach(function(module, idx) {
 	var color = percentageToColor(Math.pow((module.size+1) / (maxSize+1), 1/4));
 	var done = {};
-	var uniqueReasons = module.reasons.filter(function(reason) {
-		var parent = reason.module;
-		if(done["$"+parent]) return false;
-		done["$"+parent] = true;
-		return true;
-	});
+	var uniqueReasons = [];
+	if (module.reasons) {
+		uniqueReasons = module.reasons.filter(function(reason) {
+			var parent = reason.module;
+			if(done["$"+parent]) return false;
+			done["$"+parent] = true;
+			return true;
+		});
+	}
 	var uid = module.uid;
 	nodes.push({
 		id: "module" + uid,
